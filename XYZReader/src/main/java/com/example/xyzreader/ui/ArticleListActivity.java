@@ -35,6 +35,7 @@ import com.example.xyzreader.R;
 import com.example.xyzreader.data.ArticleLoader;
 import com.example.xyzreader.data.ItemsContract;
 import com.example.xyzreader.data.UpdaterService;
+import com.example.xyzreader.databinding.ActivityArticleListBinding;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -60,20 +61,27 @@ public class ArticleListActivity extends AppCompatActivity implements
     private SimpleDateFormat outputFormat = new SimpleDateFormat();
     // Most time functions can only handle 1902 - 2037
     private GregorianCalendar START_OF_EPOCH = new GregorianCalendar(2,1,1);
+    ActivityArticleListBinding activityArticleListBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_article_list);
+        activityArticleListBinding=ActivityArticleListBinding.inflate(getLayoutInflater());
+        View rootView=activityArticleListBinding.getRoot();
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
 
+//        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar=activityArticleListBinding.toolbar;
 
-        final View toolbarContainerView = findViewById(R.id.toolbar_container);
+        final View toolbarContainerView=activityArticleListBinding.toolbarContainer;
+//        final View toolbarContainerView = findViewById(R.id.toolbar_container);
 
-        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
+        mSwipeRefreshLayout=activityArticleListBinding.swipeRefreshLayout;
+//        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        mRecyclerView = activityArticleListBinding.recyclerView;
+//        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         getLoaderManager().initLoader(0, null, this);
 
         if (savedInstanceState == null) {
