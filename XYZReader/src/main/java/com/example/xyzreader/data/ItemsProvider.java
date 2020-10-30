@@ -140,4 +140,21 @@ public class ItemsProvider extends ContentProvider {
             db.endTransaction();
         }
     }
+
+	public ContentProviderResult[] applyInsert(ArrayList<ContentProviderOperation> operations)
+			throws OperationApplicationException {
+		final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+		db.beginTransaction();
+		try {
+			final int numOperations = operations.size();
+			final ContentProviderResult[] results = new ContentProviderResult[numOperations];
+			for (int i = 0; i < numOperations; i++) {
+				results[i] = operations.get(i).apply(this, results, i);
+			}
+			db.setTransactionSuccessful();
+			return results;
+		} finally {
+			db.endTransaction();
+		}
+	}
 }

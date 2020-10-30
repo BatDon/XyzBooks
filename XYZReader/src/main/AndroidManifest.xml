@@ -46,10 +46,17 @@
 <!--            android:grantUriPermissions="true"-->
 <!--            android:exported="false"-->
 <!--            tools:replace="android:auth" />-->
-        <provider android:name="com.example.xyzreader.data.ItemsProvider"
+        <provider
+            android:name="com.example.xyzreader.data.ItemsProvider"
             android:authorities="com.example.xyzreader"
-            android:exported="false" />
+            android:exported="true"
+            android:writePermission="android.permission.WRITE_EXTERNAL_STORAGE"/>
+<!--                    android:grantUriPermissions="true"-->
+<!--            tools:replace="android:auth" />-->
 
     </application>
 
+
 </manifest>
+
+    <!--            android:authorities="${applicationId}.com.example.xyzreader"-->
