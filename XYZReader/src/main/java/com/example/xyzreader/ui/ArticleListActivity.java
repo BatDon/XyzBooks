@@ -31,6 +31,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.xyzreader.BuildConfig;
 import com.example.xyzreader.R;
 import com.example.xyzreader.data.ArticleLoader;
 import com.example.xyzreader.data.ItemsContract;
@@ -41,6 +42,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
+
+import timber.log.Timber;
 
 /**
  * An activity representing a list of Articles. This activity has different presentations for
@@ -66,9 +69,13 @@ public class ArticleListActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_article_list);
+        //setContentView(R.layout.activity_article_list);
         activityArticleListBinding=ActivityArticleListBinding.inflate(getLayoutInflater());
         View rootView=activityArticleListBinding.getRoot();
+        setContentView(rootView);
+        if(BuildConfig.DEBUG){
+            Timber.plant(new Timber.DebugTree());
+        }
 
 
 //        mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -81,12 +88,23 @@ public class ArticleListActivity extends AppCompatActivity implements
 //        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
 
         mRecyclerView = activityArticleListBinding.recyclerView;
+//        mRecyclerView.setVisibility(View.INVISIBLE);
 //        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        Timber.i("onCreate before loader called");
+
         getLoaderManager().initLoader(0, null, this);
+
+        Timber.i("onCreate after loader called");
 
         if (savedInstanceState == null) {
             refresh();
         }
+
+        Timber.i("end of onCreate method");
+
+
+
+
     }
 
     private void refresh() {
@@ -132,13 +150,44 @@ public class ArticleListActivity extends AppCompatActivity implements
         if(cursor==null){
             Log.i("ArticleListActivity","cursor equals null");
         }
+        Log.i("ArticleListActivity","onLoadFinished called");
+
+        cursor.moveToFirst();
+        for (int i = 0; i < cursor.getCount(); i++) {
+            long id= cursor.getLong(ArticleLoader.Query._ID);
+            Timber.i("Adapter constructor id= "+id);
+            long photoUrl= cursor.getLong(ArticleLoader.Query.PHOTO_URL);
+            String photoUrlString= cursor.getString(ArticleLoader.Query.PHOTO_URL);
+            Timber.i("Adapter constructor photo_url= "+photoUrlString);
+            String thumbUrlString= cursor.getString(ArticleLoader.Query.THUMB_URL);
+            Timber.i("Adapter constructor thumb_url= "+thumbUrlString);
+            String title=cursor.getString(ArticleLoader.Query.TITLE);
+            Timber.i("Adapter title= "+title);
+            String date=cursor.getString(ArticleLoader.Query.PUBLISHED_DATE);
+            Timber.i("Adapter date= "+date);
+            cursor.moveToNext();
+        }
+
         Adapter adapter = new Adapter(cursor);
+        if(adapter==null) {
+            Timber.i("onLoadFinished adapter equals null");
+        }
+        else{
+            Timber.i("onLoadFinished adapter does not equal null");
+        }
+        if(mRecyclerView==null){
+            Timber.i("mRecyclerView equals null");
+        }
+        else{
+            Timber.i("mRecyclerView does not equal null");
+        }
         adapter.setHasStableIds(true);
         mRecyclerView.setAdapter(adapter);
         int columnCount = getResources().getInteger(R.integer.list_column_count);
         StaggeredGridLayoutManager sglm =
                 new StaggeredGridLayoutManager(columnCount, StaggeredGridLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(sglm);
+        mRecyclerView.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -151,16 +200,30 @@ public class ArticleListActivity extends AppCompatActivity implements
 
         public Adapter(Cursor cursor) {
             mCursor = cursor;
+            if(mCursor==null){
+                Timber.i("cursor equals null in onLoaderReset");
+            }
+            else{
+                Timber.i("cursor does not equal null");
+                Timber.i("Adapter cursor size= %s", mCursor.getCount());
+//                mCursor.moveToPosition(0);
+//               long id= mCursor.getLong(ArticleLoader.Query._ID);
+//                Timber.i("Adapter constructor id= "+id);
+//               long photoUrl= mCursor.getLong(ArticleLoader.Query.PHOTO_URL);
+//                Timber.i("Adapter constructor photo_url= "+photoUrl);
+            }
         }
 
         @Override
         public long getItemId(int position) {
             mCursor.moveToPosition(position);
+            Timber.i("Adapter mCursor position= %s", position);
             return mCursor.getLong(ArticleLoader.Query._ID);
         }
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            Timber.i("Adapter onCreateViewHolder called");
             View view = getLayoutInflater().inflate(R.layout.list_item_article, parent, false);
             final ViewHolder vh = new ViewHolder(view);
             view.setOnClickListener(new View.OnClickListener() {
@@ -174,6 +237,7 @@ public class ArticleListActivity extends AppCompatActivity implements
         }
 
         private Date parsePublishedDate() {
+            Timber.i("Adapter parsePublishedDate");
             try {
                 String date = mCursor.getString(ArticleLoader.Query.PUBLISHED_DATE);
                 return dateFormat.parse(date);
@@ -186,6 +250,7 @@ public class ArticleListActivity extends AppCompatActivity implements
 
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
+            Timber.i("Adapter onBindViewHolder called position= %s", position);
             mCursor.moveToPosition(position);
             holder.titleView.setText(mCursor.getString(ArticleLoader.Query.TITLE));
             Date publishedDate = parsePublishedDate();
@@ -204,6 +269,7 @@ public class ArticleListActivity extends AppCompatActivity implements
                         + "<br/>" + " by "
                         + mCursor.getString(ArticleLoader.Query.AUTHOR)));
             }
+            Timber.i("adapter before setting thumbnailView");
             holder.thumbnailView.setImageUrl(
                     mCursor.getString(ArticleLoader.Query.THUMB_URL),
                     ImageLoaderHelper.getInstance(ArticleListActivity.this).getImageLoader());
@@ -212,6 +278,7 @@ public class ArticleListActivity extends AppCompatActivity implements
 
         @Override
         public int getItemCount() {
+            Timber.i("Adapter getItemCount called mCursor count= %s", mCursor.getCount());
             return mCursor.getCount();
         }
     }
@@ -223,6 +290,7 @@ public class ArticleListActivity extends AppCompatActivity implements
 
         public ViewHolder(View view) {
             super(view);
+            Timber.i("Adapter ViewHolder being called");
             thumbnailView = (DynamicHeightNetworkImageView) view.findViewById(R.id.thumbnail);
             titleView = (TextView) view.findViewById(R.id.article_title);
             subtitleView = (TextView) view.findViewById(R.id.article_subtitle);
