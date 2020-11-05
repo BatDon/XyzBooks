@@ -17,12 +17,25 @@
 
 <resources>
 
-    <style name="Theme.Bacon" parent="@style/Theme.AppCompat.Light.NoActionBar">
+<!--    <style name="Theme.Bacon" parent="@style/Theme.AppCompat.Light.NoActionBar">-->
 
-    </style>
+<!--    </style>-->
 
-    <style name="Theme.Bacon.Detail">
-        <item name="android:statusBarColor">@android:color/transparent</item>
+<!--    <style name="Theme.Bacon.Detail">-->
+<!--        <item name="android:statusBarColor">@android:color/transparent</item>-->
+<!--    </style>-->
+
+    <!-- inherit from the AppCompat theme -->
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+
+        <!-- your app branding color for the app bar -->
+        <item name="colorPrimary">#ef6c00</item>
+
+        <!-- darker variant for the status bar and contextual app bars -->
+        <item name="colorPrimaryDark">#b53d00</item>
+
+        <!-- theme UI controls like checkboxes and text fields -->
+        <item name="colorAccent">#ff9d3f</item>
     </style>
 
 </resources>

@@ -15,6 +15,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Timer;
 
 import android.os.Bundle;
 //import android.support.v4.app.ShareCompat;
@@ -98,6 +99,8 @@ public class ArticleDetailFragment extends Fragment implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Timber.i("onCreate called");
+
         if (getArguments().containsKey(ARG_ITEM_ID)) {
             mItemId = getArguments().getLong(ARG_ITEM_ID);
         }
@@ -126,6 +129,7 @@ public class ArticleDetailFragment extends Fragment implements
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
+        Timber.i("onCreateView called");
         fragmentArticleDetailBinding=FragmentArticleDetailBinding.inflate(inflater, container, false);
         //activityArticleDetailBinding=ActivityArticleDetailBinding.inflate(inflater, container, false);
 
@@ -237,6 +241,7 @@ public class ArticleDetailFragment extends Fragment implements
     }
 
     private void bindViews() {
+        Timber.i("bindViews called");
         if (mRootView == null) {
             return;
         }
@@ -244,6 +249,7 @@ public class ArticleDetailFragment extends Fragment implements
 //        TextView titleView = (TextView) mRootView.findViewById(R.id.article_title);
 //        TextView bylineView = (TextView) mRootView.findViewById(R.id.article_byline);
         TextView titleView=fragmentArticleDetailBinding.articleTitle;
+        Timber.i("titleView= "+titleView.toString());
         TextView bylineView = fragmentArticleDetailBinding.articleByline;
 
         bylineView.setMovementMethod(new LinkMovementMethod());
@@ -326,13 +332,18 @@ public class ArticleDetailFragment extends Fragment implements
             mCursor = null;
         }
 
+        Timber.i("onLoadFinished called");
+
         bindViews();
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
         mCursor = null;
-        bindViews();
+        Timber.i("onLoaderReset called");
+        if(fragmentArticleDetailBinding!=null) {
+            bindViews();
+        }
     }
 
     public int getUpButtonFloor() {
@@ -349,6 +360,10 @@ public class ArticleDetailFragment extends Fragment implements
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        fragmentArticleDetailBinding=null;
+        Timber.i("fragment onDestroy called");
+        if(fragmentArticleDetailBinding!=null) {
+            Timber.i("fragmentArticleBinding does not equal null");
+            fragmentArticleDetailBinding = null;
+        }
     }
 }

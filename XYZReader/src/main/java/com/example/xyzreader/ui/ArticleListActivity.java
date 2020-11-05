@@ -69,6 +69,8 @@ public class ArticleListActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Timber.i("onCreate called");
         //setContentView(R.layout.activity_article_list);
         activityArticleListBinding=ActivityArticleListBinding.inflate(getLayoutInflater());
         View rootView=activityArticleListBinding.getRoot();
@@ -298,9 +300,12 @@ public class ArticleListActivity extends AppCompatActivity implements
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        activityArticleListBinding=null;
-    }
+//    @Override
+//    protected void onDestroy() {
+//        super.onDestroy();
+//        if(activityArticleListBinding!=null){
+//            activityArticleListBinding=null;
+//        }
+//
+//    }
 }
