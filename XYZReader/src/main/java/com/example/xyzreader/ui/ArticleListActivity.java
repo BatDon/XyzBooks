@@ -37,6 +37,7 @@ import com.example.xyzreader.data.ArticleLoader;
 import com.example.xyzreader.data.ItemsContract;
 import com.example.xyzreader.data.UpdaterService;
 import com.example.xyzreader.databinding.ActivityArticleListBinding;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -190,6 +191,8 @@ public class ArticleListActivity extends AppCompatActivity implements
                 new StaggeredGridLayoutManager(columnCount, StaggeredGridLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(sglm);
         mRecyclerView.setVisibility(View.VISIBLE);
+
+        Snackbar.make(activityArticleListBinding.getRoot(), R.string.books_loaded, Snackbar.LENGTH_LONG).show();
     }
 
     @Override
@@ -309,3 +312,6 @@ public class ArticleListActivity extends AppCompatActivity implements
 //
 //    }
 }
+
+
+
