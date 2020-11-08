@@ -159,6 +159,8 @@ public class ArticleDetailFragment extends Fragment implements
         mScrollView.setCallbacks(new ObservableScrollView.Callbacks() {
             @Override
             public void onScrollChanged() {
+                final float scale = getActivityCast().getResources().getDisplayMetrics().density;
+                //int pixels = (int) (dps * scale + 0.5f);
                 mScrollY = mScrollView.getScrollY();
                 getActivityCast().onUpButtonFloorChanged(mItemId, ArticleDetailFragment.this);
                 mPhotoContainerView.setTranslationY((int) (mScrollY - mScrollY / PARALLAX_FACTOR));
@@ -352,13 +354,17 @@ public class ArticleDetailFragment extends Fragment implements
 
     public int getUpButtonFloor() {
         if (mPhotoContainerView == null || mPhotoView.getHeight() == 0) {
+            Timber.i("mPhotoContainerView equals null or height of mPhotoView equals zero");
             return Integer.MAX_VALUE;
         }
+
+        Timber.i("getUpButtonFloor called");
 
         // account for parallax
         return mIsCard
                 ? (int) mPhotoContainerView.getTranslationY() + mPhotoView.getHeight() - mScrollY
                 : mPhotoView.getHeight() - mScrollY;
+//        : mPhotoView.getHeight() - mScrollY;
     }
 
     @Override

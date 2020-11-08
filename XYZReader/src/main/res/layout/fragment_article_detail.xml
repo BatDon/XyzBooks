@@ -167,6 +167,7 @@
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
+                android:background="@color/color_primary_dark"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin" />
@@ -174,7 +175,15 @@
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <com.example.xyzreader.ui.DrawInsetsFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:elevation="4dp">
+
+
+    <com.example.xyzreader.ui.DrawInsetsFrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/draw_insets_frame_layout"
         android:layout_width="match_parent"
@@ -194,8 +203,7 @@
                     android:layout_gravity="center_horizontal"
                     android:maxWidth="@dimen/detail_card_max_width"
                     android:background="#fff"
-                    android:elevation="2dp"
-                    android:layout_marginTop="@dimen/detail_card_top_margin">
+                    android:elevation="2dp">
 
                     <LinearLayout
                         android:id="@+id/meta_bar"
@@ -270,6 +278,8 @@
 
     </com.example.xyzreader.ui.DrawInsetsFrameLayout>
 
+    </androidx.core.widget.NestedScrollView>
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/share_fab"
         android:layout_width="wrap_content"
@@ -282,6 +292,11 @@
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
+
+
+<!--    android:layout_height="?attr/actionBarSize"-->
+
+<!--                    android:layout_marginTop="@dimen/detail_card_top_margin"-->
 
 
 
